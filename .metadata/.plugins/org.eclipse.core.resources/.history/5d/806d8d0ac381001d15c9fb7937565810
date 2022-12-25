@@ -1,0 +1,411 @@
+package mobile;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+public class Mobile implements MobileManager, Serializable{
+	
+	// global variables
+	private static ArrayList<Mobile> list = new ArrayList<>();
+	
+	// properties
+	private String mobile_brand;
+	private double mobile_battery;
+	private int mobile_memory;
+	protected String product_id;
+	protected String product_name;
+	protected double product_price;
+	protected int product_total;
+	
+	// constructors
+	public Mobile() {}
+	public Mobile(String product_id, String product_name, double product_price, int product_total,
+			String mobile_brand, double mobile_battery, int mobile_memory) {
+		this.product_id = product_id;
+		this.product_name = product_name;
+		this.product_price = product_price;
+		this.product_total = product_total;
+		this.mobile_brand = mobile_brand;
+		this.mobile_battery = mobile_battery;
+		this.mobile_memory = mobile_memory;
+	}
+	
+	// getters and setters
+	public String getProduct_id() {
+		return product_id;
+	}
+	public void setProduct_id(String product_id) {
+		this.product_id = product_id;
+	}
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+	public double getProduct_price() {
+		return product_price;
+	}
+	public void setProduct_price(double product_price) {
+		this.product_price = product_price;
+	}
+	public int getProduct_total() {
+		return product_total;
+	}
+	public void setProduct_total(int product_total) {
+		this.product_total = product_total;
+	}
+	
+	public String getMobile_brand() {
+		return mobile_brand;
+	}
+	public void setMobile_brand(String mobile_brand) {
+		this.mobile_brand = mobile_brand;
+	}
+	public double getMobile_battery() {
+		return mobile_battery;
+	}
+	public void setMobile_battery(double mobile_battery) {
+		this.mobile_battery = mobile_battery;
+	}
+	public int getMobile_memory() {
+		return mobile_memory;
+	}
+	public void setMobile_memory(int mobile_memory) {
+		this.mobile_memory = mobile_memory;
+	}
+	@Override
+	public String toString() {
+		return "Mobile ["+"product_id=" + product_id + ", product_name=" + product_name + ", product_price="
+				+ product_price + ", product_total=" + product_total + " "+" \n , mobile_brand=" + mobile_brand + ", mobile_battery=" + mobile_battery + ", mobile_memory="
+				+ mobile_memory + "]\n";
+	}
+	
+	// override Input method of super class (Product)
+	
+	public void Input() {
+		// clear scanner buffer
+		Scanner scanner = new Scanner(System.in);
+		scanner.nextLine();
+		System.out.print("Input mobile's brand: ");
+		this.mobile_brand = scanner.nextLine();
+		System.out.print("Input mobile's battery: ");
+		this.mobile_battery = scanner.nextDouble();
+		System.out.print("Input product's memory: ");
+		this.mobile_memory = scanner.nextInt();
+		// clear scanner buffer
+		scanner.nextLine();
+		
+	}
+	
+	// override methods of MobileManager Interface
+	/**
+	 * This method is used to add a new mobile to list
+	 */
+	@Override
+	public boolean addMobile(Mobile m) {
+		boolean checkExisted=false;
+		do {
+			checkExisted=false;
+			System.out.println("Input new mobile: ");
+			m.Input();
+//			Mobile tmp = new Mobile();
+//			for(int i=0;i<list.size();i++) {
+//				if(list.get(i).getProduct_id().compareTo(m.getProduct_id())==0) {
+//					tmp=list.get(i);
+//					break;
+//				}
+//					
+//			}
+//			if(list.contains(tmp)) {
+//				checkExisted=true;
+//				System.out.println("ID is existed!! Re-enter!!");
+//			}
+			if(list.stream().anyMatch(x->x.getProduct_id().equals(m.getProduct_id()))) {
+				checkExisted=true;
+				System.out.println("ID is existed!! Re-enter!!");
+			}
+		}while(checkExisted);
+		// add new mobile into list
+		list.add(m);
+		return (list.contains(m))?true:false;
+	}
+	
+	/**
+	 * this method is used to edit a mobile in list
+	 */
+	@Override
+	public boolean editMobile(Mobile m) {
+		int index = list.indexOf(m);
+		System.out.println("Input alternative information for "+m);
+		m.Input();
+		// set mobile at index by m
+		list.set(index, m);
+		return (list.get(index).equals(m))?true:false;
+	}
+	
+	/**
+	 * this method is used to delete a mobile from list
+	 */
+	@Override
+	public boolean delMobile(Mobile m) {
+		// remove m from list
+		list.remove(m);
+		return (list.contains(m))?false:true;
+	}
+	
+	/**
+	 * this method is used to search for a mobile by properties
+	 */
+	@Override
+	public List<Mobile> searchMobile(String name) {
+		ArrayList<Mobile> result = new ArrayList<>();
+		switch (name) {
+		case "1": {
+			System.out.print("Enter name: ");
+			String tmpName = scanner.nextLine();
+			result = (ArrayList<Mobile>) list.stream().filter(x->x.getProduct_name().equals(tmpName))
+					.collect(Collectors.toList());
+			break;
+		}
+		case "2": {
+			System.out.print("Enter price: ");
+			Double tmpPrice = scanner.nextDouble();
+			result = (ArrayList<Mobile>) list.stream().filter(x->x.getProduct_price()== tmpPrice)
+					.collect(Collectors.toList());
+			
+			break;
+		}
+		case "3": {
+			System.out.print("Enter brand: ");
+			String tmpBrand = scanner.nextLine();
+			result = (ArrayList<Mobile>) list.stream().filter(x->x.getMobile_brand().equals(tmpBrand))
+					.collect(Collectors.toList());
+			
+			break;
+		}
+		case "4": {
+			System.out.print("Enter battery: ");
+			Double tmpBattery = scanner.nextDouble();
+			result = (ArrayList<Mobile>) list.stream().filter(x->x.getMobile_battery()== tmpBattery)
+					.collect(Collectors.toList());
+			
+			break;
+		}
+		case "5": {
+			System.out.print("Enter memory: ");
+			int tmpMemory = scanner.nextInt();
+			result = (ArrayList<Mobile>) list.stream().filter(x->x.getMobile_memory()== tmpMemory)
+					.collect(Collectors.toList());
+			
+			break;
+		}
+		default:
+			System.out.println("Invalid option!");
+			break;
+		}
+		return result;
+	}
+	
+	/**
+	 * this method is used to sort list of mobile by price
+	 */
+	@Override
+	public List<Mobile> sortedMobile(double price) {
+		list.sort(Comparator.comparing(Mobile::getProduct_price));
+		if (price==0) {
+			Collections.reverse(list);
+		}
+		return list;
+	}
+	
+	// FILE
+	private static String fileName = "Mobile.bin";
+	/**
+	 * This  method is used to write list into Mobile.bin
+	 * @param list
+	 * @param isAppend
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws FileNotFoundException
+	 */
+	public static void writeToFile(ArrayList<Mobile> list, boolean isAppend) throws IOException,ClassNotFoundException, FileNotFoundException {
+
+		FileWriter fw = new FileWriter(fileName,isAppend); //the true will append the new data
+	   
+		fw.write(String.format("\n%-5s|%-20s|%-10s|%-10s|%-10s|%-10s|%-10s\n", 
+				"ID","Name","Price","Total","Brand","Battery","Memory"));//appends the string to the file
+	    
+		for(int i=0;i<list.size();i++) {
+			fw.write(String.format("\n%-5s|%-20s|%-10f|%-10d|%-10s|%-10f|%-10d",
+					list.get(i).getProduct_id(),list.get(i).getProduct_name(),list.get(i).getProduct_price(),
+					list.get(i).getProduct_total(),list.get(i).getMobile_brand(),
+					list.get(i).getMobile_battery(),list.get(i).getMobile_memory()));
+			fw.write("\n");
+		}
+		
+		fw.close();
+	}
+	
+	/**
+	 * This method is used to read file Mobile.bin
+	 * @throws IOException
+	 */
+	public static void ReadFile() throws IOException {
+
+		FileReader fr = new FileReader(fileName);
+        int i;
+        while ((i = fr.read()) != -1) {
+            System.out.print((char) i);
+        }
+        fr.close();
+	}
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		
+		try {
+			// enter how many mobile you want 
+			System.out.print("Enter number of mobiles: ");
+			int n = scanner.nextInt();
+			scanner.nextLine();
+			
+			// add n mobiles into list
+			for(int i=0;i<n;i++) {
+				// instance method has to be called by instance of class 
+				// create new mobile
+				Mobile m = new Mobile();
+				if(new Mobile().addMobile(m)) {
+					System.out.println("Added!");
+				}
+			}
+			
+			// ghi list ban dau vao file
+			Mobile.writeToFile(list, false);
+			
+			int option ;
+			do {
+				System.out.println("Enter you option: ");
+				System.out.println("1. Add a new mobile");
+				System.out.println("2. Edit a mobile ");
+				System.out.println("3. Delete a mobile");
+				System.out.println("4. Search a mobile");
+				System.out.println("5. Sort list");
+				System.out.println("6. Print list");
+				System.out.println("0. Exit");
+				
+				option = scanner.nextInt();
+				scanner.nextLine();
+				switch (option) {
+				case 1: {
+					// add a new mobile
+					Mobile m = new Mobile();
+					if(new Mobile().addMobile(m)) {
+						System.out.println("Added!");
+						// ghi list sau khi them vao file
+						Mobile.writeToFile(list, true);
+					}
+					
+					break;
+				}
+				case 2: {
+					// edit a mobile in list by entering id
+					System.out.print("Enter id of mobile that you want to edit: ");
+					String id_tmp = scanner.nextLine();
+					// you can use stream instead
+					for (Mobile m : list) {
+						if(m.getProduct_id().equals(id_tmp)) {
+							new Mobile().editMobile(m);
+							// ghi list sau khi sua vao file
+							Mobile.writeToFile(list, true);
+							break;
+						}
+					}
+					break;
+				}
+				case 3: {
+					// delete a mobile in list by entering id
+					System.out.print("Enter id of mobile that you want to delete: ");
+					String id_tmp = scanner.nextLine();
+					// you can use stream instead
+					for (Mobile m : list) {
+						if(m.getProduct_id().equals(id_tmp)) {
+							new Mobile().delMobile(m);
+							// ghi list sau khi xoa vao file
+							Mobile.writeToFile(list, true);
+							break;
+						}
+					}
+					break;
+				}
+				case 4: {
+					System.out.println("Search by: ");
+					System.out.println("1. name");
+					System.out.println("2. price");
+					System.out.println("3. brand");
+					System.out.println("4. battery");
+					System.out.println("5. memory");
+					
+					int optionSearch = scanner.nextInt();
+					scanner.nextLine();
+					
+					ArrayList<Mobile> result = (ArrayList<Mobile>) new Mobile().searchMobile(String.valueOf(optionSearch));
+					System.out.println(result);
+					// ghi list ket qua sau khi tim kiem vao file
+					Mobile.writeToFile(result, true);
+					break;
+				} 
+				case 5: {
+					System.out.println("1. Sort ascending ");
+					System.out.println("0. Sort descending ");
+					int sortOption = scanner.nextInt();
+					if (sortOption!=1 && sortOption!=0) {
+						System.out.println("Invalid option!");
+					}else {
+						ArrayList<Mobile> result = (ArrayList<Mobile>) new Mobile().sortedMobile(sortOption);
+						System.out.println(result);
+						// ghi list sau khi sap xep vao file
+						Mobile.writeToFile(result, true);
+					}
+					break;
+				}
+				case 6:{
+					System.out.println(list);
+					break;
+				}
+				case 0: {
+					System.out.println("Thanks for using this app!");
+					break;
+				}
+				default:{
+					System.out.println("Re-enter your option!!");
+					option=1;
+					break;
+				}
+					
+				}
+			}while(option>=1 && option<=6);
+			
+			
+			// close Scanner
+			scanner.close();
+		}catch (Exception e) {
+			System.out.println("Error...");
+		}
+
+	}
+	
+}

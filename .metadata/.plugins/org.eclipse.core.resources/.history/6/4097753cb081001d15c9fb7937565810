@@ -1,0 +1,28 @@
+package file;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import mobile.Mobile;
+
+public class FileWork {
+	public static void writeMobile(ArrayList<Mobile> mobiles) throws IOException {
+		FileOutputStream fos = new FileOutputStream("mobiles.tmp");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(mobiles);
+		oos.close();
+	}
+	public static ArrayList<Mobile> readMobiles() throws IOException, ClassNotFoundException{
+		FileInputStream fis = new FileInputStream("t.tmp");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		ArrayList<Mobile> mobiles=  (ArrayList<Mobile>) ois.readObject();
+		ois.close();
+		return mobiles;
+	}
+
+}

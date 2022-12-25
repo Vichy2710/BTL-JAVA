@@ -1,0 +1,42 @@
+package file;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import mobile.Mobile;
+
+public class FileWork {
+	public void writeMobile(ArrayList<Mobile> mobiles) throws IOException {
+		FileOutputStream fos = new FileOutputStream("mobiles.txt",false);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		for(Mobile x: mobiles) {
+
+			oos.writeObject(x);
+		}
+		oos.close();
+	}
+	public ArrayList<Mobile> readMobiles(){
+		ArrayList<Mobile> list = new ArrayList<>();
+		try {
+			FileInputStream fis = new FileInputStream("mobiles.txt");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			int size = ois.readInt();
+			for (int i = 0; i < size; i++) {
+			    Mobile s = (Mobile) ois.readObject();
+			    list.add(s);
+			  }
+			
+			ois.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return list;
+	}
+
+}

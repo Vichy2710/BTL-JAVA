@@ -1,0 +1,9 @@
+package mobile;
+
+public class Snippet {
+	public static void main(String[] args) {
+		
+		contentPane.setBackground(new Color(233, 252, 250));
+	}
+}
+

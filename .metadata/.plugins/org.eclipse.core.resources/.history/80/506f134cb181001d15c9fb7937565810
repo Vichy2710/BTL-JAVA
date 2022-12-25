@@ -1,0 +1,196 @@
+package mobile;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import file.FileWork;
+
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Color;
+import mobile.*;
+
+public class AddGUI extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField newID;
+	private JTextField newName;
+	private JTextField newMemory;
+	private JTextField newBattery;
+	private JTextField newPrice;
+	private JTextField newTotal;
+	private JTextField newBrand;
+	private static AddGUI frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frame = new AddGUI();
+					frame.setVisible(true);
+
+					frame.setLocationRelativeTo(null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AddGUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 895, 564);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel lblNewLabel = new JLabel("Add a mobile");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNewLabel.setBounds(317, 30, 180, 32);
+		contentPane.add(lblNewLabel);
+
+		JLabel lblNewLabel_1 = new JLabel("ID:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1.setBounds(193, 111, 70, 19);
+		contentPane.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Name:");
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_1.setBounds(193, 159, 70, 19);
+		contentPane.add(lblNewLabel_1_1);
+
+		JLabel lblNewLabel_1_2 = new JLabel("Price:");
+		lblNewLabel_1_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_2.setBounds(193, 202, 70, 19);
+		contentPane.add(lblNewLabel_1_2);
+
+		JLabel lblNewLabel_1_3 = new JLabel("Total:");
+		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_3.setBounds(193, 249, 70, 19);
+		contentPane.add(lblNewLabel_1_3);
+
+		JLabel lblNewLabel_1_4 = new JLabel("Brand:");
+		lblNewLabel_1_4.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_4.setBounds(193, 292, 70, 19);
+		contentPane.add(lblNewLabel_1_4);
+
+		JLabel lblNewLabel_1_5 = new JLabel("Battery:");
+		lblNewLabel_1_5.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_5.setBounds(193, 340, 70, 19);
+		contentPane.add(lblNewLabel_1_5);
+
+		JLabel lblNewLabel_1_6 = new JLabel("Memory:");
+		lblNewLabel_1_6.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1_6.setBounds(193, 382, 70, 19);
+		contentPane.add(lblNewLabel_1_6);
+
+		newID = new JTextField();
+		newID.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newID.setBounds(280, 108, 328, 25);
+		contentPane.add(newID);
+		newID.setColumns(10);
+
+		newName = new JTextField();
+		newName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newName.setColumns(10);
+		newName.setBounds(280, 156, 328, 25);
+		contentPane.add(newName);
+
+		newMemory = new JTextField();
+		newMemory.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newMemory.setColumns(10);
+		newMemory.setBounds(280, 382, 328, 25);
+		contentPane.add(newMemory);
+
+		newBattery = new JTextField();
+		newBattery.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newBattery.setColumns(10);
+		newBattery.setBounds(280, 340, 328, 25);
+		contentPane.add(newBattery);
+
+		newPrice = new JTextField();
+		newPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newPrice.setColumns(10);
+		newPrice.setBounds(280, 204, 328, 25);
+		contentPane.add(newPrice);
+
+		newTotal = new JTextField();
+		newTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newTotal.setColumns(10);
+		newTotal.setBounds(280, 249, 328, 25);
+		contentPane.add(newTotal);
+
+		newBrand = new JTextField();
+		newBrand.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newBrand.setColumns(10);
+		newBrand.setBounds(280, 294, 328, 25);
+		contentPane.add(newBrand);
+
+		JButton btnNewMobile = new JButton("Add");
+		btnNewMobile.setBackground(new Color(128, 255, 128));
+		btnNewMobile.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnNewMobile.setBounds(321, 445, 99, 32);
+		contentPane.add(btnNewMobile);
+		btnNewMobile.addActionListener(new ActionListener() {
+ 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (!newID.getText().equals("") && 
+						!newName.getText().equals("") 
+						&& !newPrice.getText().equals("")
+						&& !newTotal.getText().equals("") 
+						&& !newBrand.getText().equals("") 
+						&& !newBattery.getText().equals("")
+						&& !newMemory.getText().equals("")) {
+					Mobile tmp = new Mobile(newID.getText(), newName.getText(), Double.parseDouble(newPrice.getText()),
+							Integer.parseInt(newTotal.getText()), newBrand.getText(),
+							Double.parseDouble(newBattery.getText()), Integer.parseInt(newMemory.getText()));
+					try {
+						new HomeGUI().addMobile(tmp);
+						try {
+							HomeGUI homeGUI= new HomeGUI();
+							FileWork fileWork = new FileWork();
+							fileWork.writeMobile(homeGUI.list);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					dispose(); 
+					Window homeWindow = null;
+					try {
+						homeWindow = new HomeGUI();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					homeWindow.show();
+				}
+			}
+		});
+	}
+
+}

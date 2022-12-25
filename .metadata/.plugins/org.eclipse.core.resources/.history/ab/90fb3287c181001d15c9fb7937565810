@@ -1,0 +1,8 @@
+import file.FileWork;
+
+public class xx {
+public static void main(String[] args) {
+	FileWork xFileWork = new FileWork();
+	System.out.println(xFileWork.readMobiles());
+}
+}

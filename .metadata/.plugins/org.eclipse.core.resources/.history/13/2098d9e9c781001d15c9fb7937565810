@@ -1,0 +1,514 @@
+package mobile;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+import Home.TrangChuGUI;
+import file.FileWork;
+public class HomeGUI extends JFrame implements ActionListener, MobileManager {
+	public Mobile mobile = new Mobile();
+	static FileWork fileWork = new FileWork();
+	public ArrayList<Mobile> list = fileWork.readMobiles();
+	
+	private static HomeGUI frame;
+	private JPanel contentPane;
+	private JTable table;
+	private JTextField tf_search;
+	private JComboBox comboboxSearch, comboboxSort;
+	private JButton btnSearch, btnEdit, btnDelete, btnAdd;
+	DefaultTableModel model;
+	private JButton btnReset;
+	private JPanel backPanel;
+
+	public static Mobile add(Mobile tmp) {
+		return tmp;
+	}
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frame = new HomeGUI();
+					frame.setVisible(true);
+
+					frame.setLocationRelativeTo(null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * @throws IOException 
+	 */
+	public HomeGUI() throws IOException {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1167, 687);
+		contentPane = new JPanel();
+
+		contentPane.setBackground(new Color(233, 252, 250));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		// Title
+		JLabel lblNewLabel = new JLabel(list.toString());
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNewLabel.setBounds(198, 10, 639, 40);
+		contentPane.add(lblNewLabel);
+
+		// create Table
+		table = new JTable();
+		table.setDefaultEditor(Object.class, null);
+		// display list Mobile
+		table.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "ID", "Name", "Price", "Total", "Brand", "Battery", "Memory" }));
+		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		model = (DefaultTableModel) table.getModel();
+		model.addRow(new Object[] { "ID", "Name", "Price", "Total", "Brand", "Battery", "Memory" });
+
+		table.setRowHeight(30);
+		// set color for table
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+		{
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		    {
+		        final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        c.setBackground(row == 0 ? Color.LIGHT_GRAY : Color.WHITE);
+		        return c;
+		    }
+		});
+		
+		// duyet list
+		for (int i = 0; i < list.size(); i++) {
+			Mobile tmpMobile = list.get(i);
+			model.addRow(new Object[] { tmpMobile.getProduct_id(), tmpMobile.getProduct_name(),
+					tmpMobile.getProduct_price(), tmpMobile.getProduct_total(), tmpMobile.getMobile_brand(),
+					tmpMobile.getMobile_battery(), tmpMobile.getMobile_battery() });
+		}
+
+		table.setBounds(10, 152, 1133, 488);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				// xoa phan tu
+				btnDelete.setEnabled(true);
+				btnDelete.addActionListener(new ActionListener() {					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						for (int i = 0; i < list.size(); i++) {
+							if (list.get(i).getProduct_id().equals(table.getValueAt(table.getSelectedRow(), 0))) {
+								delMobile(list.get(i));
+								
+							}
+						}
+						
+
+					}
+				});				
+				// sua phan tu
+				btnEdit.setEnabled(true);
+				btnEdit.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						for (int i = 0; i < list.size(); i++) {
+							if (list.get(i).getProduct_id().equals(table.getValueAt(table.getSelectedRow(), 0))) {
+								new EditGUI().mobileEdit = list.get(i);
+							}
+						}
+						Window editWindow = new EditGUI();
+						editWindow.show();
+						dispose();
+						
+					}
+				});				
+			}
+		});
+
+		contentPane.add(table);
+
+		// add button
+		btnAdd = new JButton("Add");
+		btnAdd.setForeground(Color.BLACK);
+		btnAdd.setBackground(new Color(128, 255, 128));
+		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnAdd.setBounds(1004, 77, 100, 34);
+		contentPane.add(btnAdd);
+		btnAdd.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Window addWindow = new AddGUI();
+				dispose();
+				addWindow.show();
+
+			}
+		});
+
+		// edit button
+		btnEdit = new JButton("Edit");
+		btnEdit.setEnabled(false);
+		btnEdit.setForeground(Color.BLACK);
+		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnEdit.setBackground(new Color(128, 255, 128));
+		btnEdit.setBounds(23, 81, 72, 27);
+		contentPane.add(btnEdit);
+		
+
+		btnDelete = new JButton("Delete");
+		btnDelete.setEnabled(false);
+		btnDelete.setForeground(Color.BLACK);
+		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnDelete.setBackground(new Color(128, 255, 128));
+		btnDelete.setBounds(105, 81, 83, 27);
+		contentPane.add(btnDelete);
+ 
+		// nhap thong tin tim kiem
+		tf_search = new JTextField();
+		tf_search.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		tf_search.setBounds(679, 80, 158, 34);
+		contentPane.add(tf_search);
+		tf_search.setColumns(10);
+
+		// search button
+		btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSearch.setForeground(Color.BLACK);
+		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnSearch.setBackground(new Color(128, 255, 128));
+		btnSearch.setBounds(847, 81, 83, 27);
+		contentPane.add(btnSearch);
+		btnSearch.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String x = String.valueOf(comboboxSearch.getSelectedItem());
+				if (x == "Name") {
+					searchMobile("Name");
+				} else if (x == "Price") {
+					searchMobile("Price");
+				} else if (x == "Brand") {
+					searchMobile("Brand");
+				} else if (x == "Battery") {
+					searchMobile("Battery");
+				} else if (x == "Memory") {
+					searchMobile("Memory");
+				}
+
+			}
+		});
+
+		JLabel lblNewLabel_1 = new JLabel("Search by:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(510, 84, 66, 21);
+		contentPane.add(lblNewLabel_1);
+
+		// chon thuoc tinh tim kiem
+		comboboxSearch = new JComboBox();
+		comboboxSearch.setBackground(new Color(204, 255, 204));
+		comboboxSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboboxSearch
+				.setModel(new DefaultComboBoxModel(new String[] { "Name", "Price", "Brand", "Battery", "Memory" }));
+		comboboxSearch.setBounds(586, 81, 83, 27);
+		contentPane.add(comboboxSearch);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Sort by price: ");
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_1_1.setBounds(243, 84, 100, 21);
+		contentPane.add(lblNewLabel_1_1);
+ 
+		// chon kieu sap xep
+		comboboxSort = new JComboBox();
+		comboboxSort.setModel(new DefaultComboBoxModel(new String[] { "Ascending", "Descending" }));
+		comboboxSort.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboboxSort.setBackground(new Color(204, 255, 204));
+		comboboxSort.setBounds(333, 81, 94, 27);
+		contentPane.add(comboboxSort);
+		// select item in combo box sort
+		comboboxSort.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String x = String.valueOf(comboboxSort.getSelectedItem());
+				if (x == "Ascending") {
+					sortedMobile(1);
+				} else {
+					sortedMobile(0);
+				}
+
+			}
+		});
+
+		// reset table button
+		btnReset = new JButton("Reset Page");
+		btnReset.setBackground(new Color(255, 168, 211));
+		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnReset.setBounds(975, 15, 118, 34);
+		contentPane.add(btnReset);
+				
+		btnReset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// hien thi lai list ban dau
+				// clear table
+				model.setRowCount(0);
+				model.addRow(new Object[] { "ID", "Name", "Price", "Total", "Brand", "Battery", "Memory" });
+
+				// duyet list
+				for (int i = 0; i < list.size(); i++) {
+					Mobile tmpMobile = list.get(i);
+					model.addRow(new Object[] { tmpMobile.getProduct_id(), tmpMobile.getProduct_name(),
+							tmpMobile.getProduct_price(), tmpMobile.getProduct_total(), tmpMobile.getMobile_brand(),
+							tmpMobile.getMobile_battery(), tmpMobile.getMobile_battery() });
+				}
+			}
+		});
+		 
+		// remove focus boder for all button
+		// reset
+		btnReset.setFocusable(false);
+		btnReset.setFocusPainted(false);
+		// add
+		btnAdd.setFocusable(false);
+		btnAdd.setFocusPainted(false);
+		// edit
+		btnEdit.setFocusable(false);
+		btnEdit.setFocusPainted(false);
+		// delete
+		btnDelete.setFocusable(false);
+		btnDelete.setFocusPainted(false);
+		// search  
+		btnSearch.setFocusable(false);
+		btnSearch.setFocusPainted(false);
+		
+		backPanel = new JPanel();
+		backPanel.setBounds(23, 15, 165, 35);
+		backPanel.setBackground(new Color(233, 252, 250));
+		contentPane.add(backPanel);
+		BufferedImage backBufferedImage = ImageIO.read(new File("D:\\Java_School\\back_icon.png"));		
+		backPanel.setLayout(null);		
+		JLabel backImageJLabel = new JLabel(new ImageIcon( 
+				backBufferedImage.getScaledInstance(35,35,Image.SCALE_SMOOTH)));
+		backImageJLabel.setSize(35,35);
+		backPanel.add(backImageJLabel);
+		
+		JLabel lblNewLabel_2 = new JLabel("Back to Home");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(45, 0, 124, 35);
+		backPanel.add(lblNewLabel_2);
+		
+		backPanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				 
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				 
+			}
+			 
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				Window trangChuGUI = null;
+				try {
+					trangChuGUI = new TrangChuGUI();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				trangChuGUI.show();
+				dispose();
+				
+				
+			}
+		});
+		
+		
+		
+	}
+
+	@Override
+	public boolean addMobile(Mobile m) {
+		if (list.stream().anyMatch(x -> x.getProduct_id().equals(m.getProduct_id()))) {
+			System.out.println("ID is existed!! Re-enter!!");
+		}else {
+			// add new mobile into list
+			list.add(m);
+		}
+		try {
+			fileWork.writeMobile(list);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (list.contains(m)) ? true : false;
+	}
+
+	@Override
+	public boolean editMobile(Mobile m) {
+		return false;
+	}
+
+	@Override
+	public boolean delMobile(Mobile m) {
+		list.remove(m);
+		try {
+			fileWork.writeMobile(list);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (list.contains(m)) ? false : true;
+	}
+
+	@Override
+	public List<Mobile> searchMobile(String name) {
+		ArrayList<Mobile> result = new ArrayList<>();
+		switch (name) {
+		case "Name": {
+			result = (ArrayList<Mobile>) list.stream().filter(x -> x.getProduct_name().equals(tf_search.getText()))
+					.collect(Collectors.toList());
+			break;
+		}
+		case "Price": {
+			result = (ArrayList<Mobile>) list.stream()
+					.filter(x -> x.getProduct_price() == Double.parseDouble(tf_search.getText()))
+					.collect(Collectors.toList());
+
+			break;
+		}
+		case "Brand": {
+			result = (ArrayList<Mobile>) list.stream().filter(x -> x.getMobile_brand().equals(tf_search.getText()))
+					.collect(Collectors.toList());
+
+			break;
+		}
+		case "Battery": {
+			result = (ArrayList<Mobile>) list.stream()
+					.filter(x -> x.getMobile_battery() == Double.parseDouble(tf_search.getText()))
+					.collect(Collectors.toList());
+
+			break;
+		}
+		case "Memory": {
+			result = (ArrayList<Mobile>) list.stream()
+					.filter(x -> x.getMobile_memory() == Integer.parseInt(tf_search.getText()))
+					.collect(Collectors.toList());
+
+			break;
+		}
+		default: 
+			break;
+		}
+		// clear table
+		model.setRowCount(0);
+		model.addRow(new Object[] { "ID", "Name", "Price", "Total", "Brand", "Battery", "Memory" });
+
+		// duyet list
+		for (int i = 0; i < result.size(); i++) {
+			Mobile tmpMobile = result.get(i);
+			model.addRow(new Object[] { tmpMobile.getProduct_id(), tmpMobile.getProduct_name(),
+					tmpMobile.getProduct_price(), tmpMobile.getProduct_total(), tmpMobile.getMobile_brand(),
+					tmpMobile.getMobile_battery(), tmpMobile.getMobile_battery() });
+		}
+		return result;
+	}
+
+	
+	
+	@Override
+	public List<Mobile> sortedMobile(double price) {
+		ArrayList<Mobile> sortedList = list;
+		sortedList.sort(Comparator.comparing(Mobile::getProduct_price));
+		if (price == 0) {
+			Collections.reverse(sortedList);
+		}
+
+		// clear table
+		model.setRowCount(0);
+		model.addRow(new Object[] { "ID", "Name", "Price", "Total", "Brand", "Battery", "Memory" });
+
+		// duyet list
+		for (int i = 0; i < sortedList.size(); i++) {
+			Mobile tmpMobile = sortedList.get(i);
+			model.addRow(new Object[] { tmpMobile.getProduct_id(), tmpMobile.getProduct_name(),
+					tmpMobile.getProduct_price(), tmpMobile.getProduct_total(), tmpMobile.getMobile_brand(),
+					tmpMobile.getMobile_battery(), tmpMobile.getMobile_battery() });
+		}
+		return sortedList;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}

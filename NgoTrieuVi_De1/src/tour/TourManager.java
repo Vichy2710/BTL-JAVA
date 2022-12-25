@@ -1,0 +1,21 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package tour;
+
+import java.util.List;
+
+/**
+ *
+ * @author admin
+ */
+public interface TourManager {
+    public boolean addTour(Tour t);
+    public boolean editTour(Tour t);
+    public boolean delTour(Tour t);
+    public List<Tour> searchTourByName(String name);
+    public List<Tour> searchTourByPrice(Double price);
+    public List<Tour> searchTourByTime(Double time);
+    public List<Tour> sortedTour(Double price);
+}
