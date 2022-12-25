@@ -1,10 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy>
-    <typeInfo handle="=group19/src&lt;objects{Person.java[Person" modifiers="1" timestamp="1669272394898"/>
-    <typeInfo handle="=group19/src&lt;objects{Manager.java[Manager" modifiers="1025" timestamp="1666860997697"/>
-    <typeInfo handle="=group19/src&lt;objects{Car.java[Car" modifiers="1025" timestamp="1666864630666"/>
-    <typeInfo handle="=group19/src&lt;objects{Animal.java[Animal" modifiers="1025" timestamp="1666864619284"/>
-    <typeInfo handle="=group19/src&lt;objects{ND.java[ND" modifiers="513" timestamp="1667457659045"/>
-    <typeInfo handle="=group19/src&lt;objects{BTTU.java[BTTU" modifiers="513" timestamp="1667457843258"/>
-    <typeInfo handle="=group19/src&lt;objects{Product.java[Product" modifiers="1" timestamp="1668066875856"/>
-</typeInfoHistroy>
+<typeInfoHistroy/>
