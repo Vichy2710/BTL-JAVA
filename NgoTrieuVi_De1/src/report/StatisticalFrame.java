@@ -144,7 +144,7 @@ public class StatisticalFrame<X> extends JFrame {
 		model_Statistic = new DefaultTableModel(); 
 		model_Statistic.setColumnIdentifiers(columnHeaders_Statistic);
 		
-		list_Statistic_Max.forEach(item ->{
+		list_Statistic_Max.forEach(item ->{ 
 			model_Statistic.addRow(new Object[] {
 					item.getProduct_id(), item.getProduct_name(), item.getProduct_price(), item.getProduct_total() 
 			}); 

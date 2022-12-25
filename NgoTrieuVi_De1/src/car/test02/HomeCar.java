@@ -134,7 +134,7 @@ public class HomeCar extends JFrame {
 		lblName.setBounds(10, 336, 90, 13);
 		contentPane.add(lblName);
 		
-		textFieldName = new JTextField();
+		textFieldName = new JTextField(); 
 		textFieldName.setBounds(215, 334, 177, 19);
 		contentPane.add(textFieldName);
 		textFieldName.setColumns(10);

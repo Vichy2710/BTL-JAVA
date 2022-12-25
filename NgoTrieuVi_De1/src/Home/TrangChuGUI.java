@@ -1,10 +1,13 @@
 package Home;
 import java.awt.EventQueue;
 import mobile.*;
+import report.StatisticalFrame;
 import tour.Swing;
 
 import java.awt.Image;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -105,6 +108,16 @@ public class TrangChuGUI extends JFrame {
 		btnLogOut.setFocusable(false);
 		btnLogOut.setFocusPainted(false);
 		contentPane.add(btnLogOut);
+		btnLogOut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentUser = new User();
+				Window loginWindow = new login();
+				loginWindow.show();
+				dispose();
+			}
+		});
 		
 		// car manage
 		JPanel carPanel = new JPanel();
@@ -224,7 +237,12 @@ public class TrangChuGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Window swing = null;
-				swing = new Swing();
+				try {
+					swing = new Swing();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				dispose();
 				swing.show();
 				
@@ -318,6 +336,21 @@ public class TrangChuGUI extends JFrame {
 		lblChoMngNg.setFont(new Font("Arial", Font.ITALIC, 17));
 		lblChoMngNg.setBounds(10, 201, 567, 43);
 		contentPane.add(lblChoMngNg);
+		
+		JButton btnReport = new JButton("Thống kê");
+		btnReport.setBackground(new Color(255, 250, 240));
+		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnReport.setBounds(803, 212, 114, 32);
+		contentPane.add(btnReport);
+		btnReport.setFocusable(false);
+		btnReport.setFocusPainted(false);
+		btnReport.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		
 		
 		
