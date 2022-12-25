@@ -1,52 +1,47 @@
+package mobile;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import java.awt.GridLayout;
-import java.awt.Window;
-
-import javax.swing.JLabel;
-import javax.management.loading.PrivateClassLoader;
-import javax.swing.BoxLayout;
 import java.awt.Font;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
-import mobile.AddGUI;
-
-import javax.swing.JButton;
+import java.awt.Image;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.Component;
 
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerListModel;
-import javax.swing.SwingUtilities;
-import javax.swing.JComboBox;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import Home.TrangChuGUI;
+import file.FileWork;
 public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 	public Mobile mobile = new Mobile();
-	public static ArrayList<Mobile> list = new ArrayList<>();
-
+	static FileWork fileWork = new FileWork();
+	public ArrayList<Mobile> list = fileWork.readMobiles();
+	
 	private static HomeGUI frame;
 	private JPanel contentPane;
 	private JTable table;
@@ -55,6 +50,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 	private JButton btnSearch, btnEdit, btnDelete, btnAdd;
 	DefaultTableModel model;
 	private JButton btnReset;
+	private JPanel backPanel;
 
 	public static Mobile add(Mobile tmp) {
 		return tmp;
@@ -80,8 +76,9 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public HomeGUI() {
+	public HomeGUI() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1167, 687);
 		contentPane = new JPanel();
@@ -143,6 +140,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 						for (int i = 0; i < list.size(); i++) {
 							if (list.get(i).getProduct_id().equals(table.getValueAt(table.getSelectedRow(), 0))) {
 								delMobile(list.get(i));
+								
 							}
 						}
 						
@@ -160,10 +158,10 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 								new EditGUI().mobileEdit = list.get(i);
 							}
 						}
-						
-						dispose();
 						Window editWindow = new EditGUI();
 						editWindow.show();
+
+						dispose();
 						
 					}
 				});				
@@ -187,8 +185,9 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				
 				Window addWindow = new AddGUI();
+				dispose();
 				addWindow.show();
 
 			}
@@ -211,7 +210,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 		btnDelete.setBackground(new Color(128, 255, 128));
 		btnDelete.setBounds(105, 81, 83, 27);
 		contentPane.add(btnDelete);
-
+ 
 		// nhap thong tin tim kiem
 		tf_search = new JTextField();
 		tf_search.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -268,7 +267,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_1_1.setBounds(243, 84, 100, 21);
 		contentPane.add(lblNewLabel_1_1);
-
+ 
 		// chon kieu sap xep
 		comboboxSort = new JComboBox();
 		comboboxSort.setModel(new DefaultComboBoxModel(new String[] { "Ascending", "Descending" }));
@@ -295,7 +294,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 		btnReset = new JButton("Reset Page");
 		btnReset.setBackground(new Color(255, 168, 211));
 		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnReset.setBounds(45, 24, 118, 34);
+		btnReset.setBounds(975, 15, 118, 34);
 		contentPane.add(btnReset);
 				
 		btnReset.addActionListener(new ActionListener() {
@@ -334,42 +333,88 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 		btnSearch.setFocusable(false);
 		btnSearch.setFocusPainted(false);
 		
-	}
+		backPanel = new JPanel();
+		backPanel.setBounds(23, 15, 165, 35);
+		backPanel.setBackground(new Color(233, 252, 250));
+		contentPane.add(backPanel);
+		BufferedImage backBufferedImage = ImageIO.read(new File("D:\\Java_School\\back_icon.png"));		
+		backPanel.setLayout(null);		
+		JLabel backImageJLabel = new JLabel(new ImageIcon( 
+				backBufferedImage.getScaledInstance(35,35,Image.SCALE_SMOOTH)));
+		backImageJLabel.setSize(35,35);
+		backPanel.add(backImageJLabel);
+		 
+		JLabel lblNewLabel_2 = new JLabel("Back to Home");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(45, 0, 124, 35);
+		backPanel.add(lblNewLabel_2);
+		
+		backPanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				 
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				 
+			}
+			 
+			@Override
+			public void mouseClicked(MouseEvent e) {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+				Window trangChuGUI = null;
+				try {
+					trangChuGUI = new TrangChuGUI();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				trangChuGUI.show();
+				dispose();
+				
+				
+			}
+		});
+		
+		
+		
 	}
 
 	@Override
 	public boolean addMobile(Mobile m) {
-		if (list.stream().anyMatch(x -> x.getProduct_id().equals(m.getProduct_id()))) {
-			System.out.println("ID is existed!! Re-enter!!");
-		}else {
-			// add new mobile into list
-			list.add(m);
-		}
-
-		return (list.contains(m)) ? true : false;
+		return false;
 	}
 
 	@Override
 	public boolean editMobile(Mobile m) {
-		int index=0;
-		for (Mobile mobile : list) {
-			if(m.getProduct_id().equals(mobile.getProduct_id())) {
-				index = list.indexOf(m);
-			}
-		}
-		
-		// set mobile at index by m
-		list.set(index, m);
-		return (list.get(index).equals(m)) ? true : false;
+		return false;
 	}
 
 	@Override
 	public boolean delMobile(Mobile m) {
 		list.remove(m);
+		try {
+			fileWork.writeMobile(list);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (list.contains(m)) ? false : true;
 	}
 
@@ -409,7 +454,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 
 			break;
 		}
-		default:
+		default: 
 			break;
 		}
 		// clear table
@@ -448,5 +493,11 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 					tmpMobile.getMobile_battery(), tmpMobile.getMobile_battery() });
 		}
 		return sortedList;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

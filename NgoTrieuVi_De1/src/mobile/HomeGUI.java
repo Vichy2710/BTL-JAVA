@@ -41,7 +41,8 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 	public Mobile mobile = new Mobile();
 	static FileWork fileWork = new FileWork();
 	public ArrayList<Mobile> list = fileWork.readMobiles();
-	
+
+	public static final String LOCAL_PATH = TrangChuGUI.LOCAL_PATH;
 	private static HomeGUI frame;
 	private JPanel contentPane;
 	private JTable table;
@@ -337,7 +338,7 @@ public class HomeGUI extends JFrame implements ActionListener, MobileManager {
 		backPanel.setBounds(23, 15, 165, 35);
 		backPanel.setBackground(new Color(233, 252, 250));
 		contentPane.add(backPanel);
-		BufferedImage backBufferedImage = ImageIO.read(new File("D:\\Java_School\\back_icon.png"));		
+		BufferedImage backBufferedImage = ImageIO.read(new File(LOCAL_PATH+"back_icon.png"));		
 		backPanel.setLayout(null);		
 		JLabel backImageJLabel = new JLabel(new ImageIcon( 
 				backBufferedImage.getScaledInstance(35,35,Image.SCALE_SMOOTH)));

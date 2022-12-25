@@ -40,8 +40,7 @@ public class Swing extends javax.swing.JFrame {
      * Creates new form Swing
      */
     final XManager xmanager = new XManager();
-
-	public static final String LOCAL_PATH = TrangChuGUI.LOCAL_PATH;
+    
     public Tour getTour() {
         Tour t = new Tour();
         t.setProduct_id(id.getText().trim());
@@ -152,7 +151,7 @@ public class Swing extends javax.swing.JFrame {
 		backPanel.setBounds(23, 15, 165, 35);
 		backPanel.setBackground(new Color(233, 252, 250));
 		getContentPane().add(backPanel);
-		BufferedImage backBufferedImage = ImageIO.read(new File(LOCAL_PATH+"back_icon.png"));		
+		BufferedImage backBufferedImage = ImageIO.read(new File("D:\\Java_School\\back_icon.png"));		
 		backPanel.setLayout(null);		
 		JLabel backImageJLabel = new JLabel(new ImageIcon( 
 				backBufferedImage.getScaledInstance(35,35,Image.SCALE_SMOOTH)));

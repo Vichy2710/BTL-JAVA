@@ -37,7 +37,6 @@
     <fullyQualifiedTypeName name="file.File"/>
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="mobile.HomeGUI"/>
-    <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="java.io.FileNotFoundException"/>
     <fullyQualifiedTypeName name="java.io.Serializable"/>
     <fullyQualifiedTypeName name="file.FileWork"/>
@@ -51,7 +50,6 @@
     <fullyQualifiedTypeName name="tour.Swing"/>
     <fullyQualifiedTypeName name="car.test01.Car"/>
     <fullyQualifiedTypeName name="car.test02.HomeCar"/>
-    <fullyQualifiedTypeName name="Home.TrangChuGUI"/>
     <fullyQualifiedTypeName name="java.lang.Long"/>
     <fullyQualifiedTypeName name="tour.Product"/>
     <fullyQualifiedTypeName name="car.test01.Product"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="java.awt.Window"/>
     <fullyQualifiedTypeName name="Home.login"/>
     <fullyQualifiedTypeName name="Home.User"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="Home.TrangChuGUI"/>
 </qualifiedTypeNameHistroy>

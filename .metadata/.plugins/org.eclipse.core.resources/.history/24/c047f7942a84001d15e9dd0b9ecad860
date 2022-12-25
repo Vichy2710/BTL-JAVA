@@ -55,8 +55,6 @@ public class HomeCar extends JFrame {
 	private JTextField textFieldSearch;
 	private JTextField textFieldSort;
 
-	public static final String LOCAL_PATH = TrangChuGUI.LOCAL_PATH;
-
 	/**
 	 * Launch the application.
 	 */
@@ -193,7 +191,7 @@ public class HomeCar extends JFrame {
 		backPanel.setBounds(23, 15, 165, 35);
 		backPanel.setBackground(new Color(233, 252, 250));
 		contentPane.add(backPanel);
-		BufferedImage backBufferedImage = ImageIO.read(new File(LOCAL_PATH+"back_icon.png"));		
+		BufferedImage backBufferedImage = ImageIO.read(new File("D:\\Java_School\\back_icon.png"));		
 		backPanel.setLayout(null);		
 		JLabel backImageJLabel = new JLabel((Icon) new ImageIcon( 
 				backBufferedImage.getScaledInstance(35,35,Image.SCALE_SMOOTH)));
